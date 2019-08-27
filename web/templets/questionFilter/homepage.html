@@ -15,6 +15,13 @@
     </div>
 
 
+
+
+
+
+
+
+
     <div class="container">
       <table class="table table-hover table-striped">
         <thead>
@@ -31,10 +38,6 @@
           <tr>
             <th scope="row">{{question.front_id}}</th>
             <td>
-              <!-- <form method="post" action="questionFilter/question_detai.html">
-                  <input type="hidden" name="slug" value="{{question.name}}" />
-                  <input class = "" type="submit" value="{{question.name}}" />
-              </form> -->
               <a href="/question_detail/{{question.question_slug}}">{{question.name}}</a>
             </td>
             <td>
@@ -66,6 +69,48 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <!-- Pagination -->
+      <!-- <div class="pagination">
+          <span class="step-links">
+              {% if questions.has_previous %}
+                  <a href="?page=1">&laquo; first</a>
+                  <a href="?page={{ questions.previous_page_number }}">previous</a>
+              {% endif %}
+
+              <span class="current">
+                  Page {{ questions.number }} of {{ questions.paginator.num_pages }}.
+              </span>
+
+              {% if questions.has_next %}
+                  <a href="?page={{ questions.next_page_number }}">next</a>
+                  <a href="?page={{ questions.paginator.num_pages }}">last &raquo;</a>
+              {% endif %}
+          </span>
+      </div> -->
+
+
+      <nav aria-label="...">
+        <ul class="pagination">
+          {% if questions.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ questions.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          <!-- <li class="page-item"><a class="page-link" href="?page={{ questions.previous_page_number }}">{{ questions.number }}</a></li> -->
+          {% endif %}
+
+          <li class="page-item disabled active">
+            <a class="page-link" href="#">{{ questions.number }}<span class="sr-only">(current)</span></a>
+          </li>
+          <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+
+          {% if questions.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ questions.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
 
     </div>
   </body>
