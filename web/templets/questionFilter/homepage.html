@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>LeetcodeHelper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <h1>Hi, 兔兔</h1>
+    <div class="container ">
+      <button type="button" class="btn btn-success">Easy</button>
+      <button type="button" class="btn btn-warning text-white">Medium</button>
+      <button type="button" class="btn btn-danger">Hard</button>
+    </div>
+
+
+    <div class="container">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Difficulty</th>
+            <th scope="col">AC Rate</th>
+            <th scope="col">Frequency</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for question in questions %}
+          <tr>
+            <th scope="row">{{question.front_id}}</th>
+            <td>
+              <!-- <form method="post" action="questionFilter/question_detai.html">
+                  <input type="hidden" name="slug" value="{{question.name}}" />
+                  <input class = "" type="submit" value="{{question.name}}" />
+              </form> -->
+              <a href="/question_detail/{{question.question_slug}}">{{question.name}}</a>
+            </td>
+            <td>
+              {% if question.difficulty == 'Easy' %}
+              <span class="badge badge-pill badge-success">Easy</span>
+              {% elif question.difficulty == 'Medium' %}
+              <span class="badge badge-pill badge-warning text-white">Medium</span>
+              {% else %}
+              <span class="badge badge-pill badge-danger">Hard</span>
+              {% endif %}
+            </td>
+            <td>{{question.accept_rate}}%</td>
+            <td>
+              {% if question.frequency <= 20  %}
+              <div class="progress" style="width: 100px; margin-top: 5px; margin-bottom: 0px; height: 12px;">
+                <div class="progress-bar bg-info rounded" style="width: {{question.frequency}}px;"></div>
+              </div>
+              {% elif 20 < question.frequency and question.frequency < 60 %}
+              <div class="progress" style="width: 100px; margin-top: 5px; margin-bottom: 0px; height: 12px;">
+                <div class="progress-bar bg-warning rounded" style="width: {{question.frequency}}px;"></div>
+              </div>
+              {% else %}
+              <div class="progress" style="width: 100px; margin-top: 5px; margin-bottom: 0px; height: 12px;">
+                <div class="progress-bar bg-success rounded" style="width: {{question.frequency}}px;"></div>
+              </div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </body>
+</html>
