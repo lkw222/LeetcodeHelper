@@ -20,5 +20,7 @@ from questionFilter import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
-    re_path(r'question_detail/(.+)/$', views.question_detail)
+    re_path(r'question_detail/(.+)/$', views.question_detail),
+    re_path(r'company_filter/(.+)/$', views.company_filter),
+    re_path(r'algorithm_filter/(.+)/$', views.algorithm_filter)
 ]

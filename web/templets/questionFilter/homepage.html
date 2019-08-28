@@ -3,25 +3,64 @@
   <head>
     <meta charset="utf-8">
     <title>LeetcodeHelper</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </head>
   <body>
     <h1>Hi, 兔兔</h1>
-    <div class="container ">
+    <div class="container my-2">
       <button type="button" class="btn btn-success">Easy</button>
       <button type="button" class="btn btn-warning text-white">Medium</button>
       <button type="button" class="btn btn-danger">Hard</button>
     </div>
 
+    <!-- Company select -->
+    <div class="container">
+      <p>
+        <button class="btn btn-success my-2" type="button" data-toggle="collapse" data-target="#companys" aria-expanded="false" aria-controls="companys">
+          Company
+        </button>
+      </p>
+      <div class="collapse" id="companys">
+        <div class="container">
+          {% for company in companys %}
+          {% if company_selected and company.company_slug in company_selected %}
+          <a href="/company_filter/{{company.company_slug}}" class="btn btn-outline-success badge-pill btn-sm active" role="button" aria-pressed="true">{{company.name}}</a>
+          {% else %}
+          <a href="/company_filter/{{company.company_slug}}" class="btn btn-outline-success badge-pill btn-sm" role="button" aria-pressed="true">{{company.name}}</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Algorithm select -->
+    <div class="container">
+      <p>
+        <button class="btn btn-success my-2" type="button" data-toggle="collapse" data-target="#algorithms" aria-expanded="false" aria-controls="algorithms">
+          Tag
+        </button>
+      </p>
+      <div class="collapse" id="algorithms">
+        <div class="container">
+          {% for algorithm in algorithms %}
+          {% if algorithm_selected and algorithm.algorithm_slug in algorithm_selected %}
+          <a href="/algorithm_filter/{{algorithm.algorithm_slug}}" class="btn btn-outline-success badge-pill btn-sm active" role="button" aria-pressed="true">{{algorithm.name}}</a>
+          {% else %}
+          <a href="/algorithm_filter/{{algorithm.algorithm_slug}}" class="btn btn-outline-success badge-pill btn-sm" role="button" aria-pressed="true">{{algorithm.name}}</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
 
 
 
 
-
-
-
-
+    <!-- Question detail -->
     <div class="container">
       <table class="table table-hover table-striped">
         <thead>
@@ -71,25 +110,6 @@
       </table>
 
       <!-- Pagination -->
-      <!-- <div class="pagination">
-          <span class="step-links">
-              {% if questions.has_previous %}
-                  <a href="?page=1">&laquo; first</a>
-                  <a href="?page={{ questions.previous_page_number }}">previous</a>
-              {% endif %}
-
-              <span class="current">
-                  Page {{ questions.number }} of {{ questions.paginator.num_pages }}.
-              </span>
-
-              {% if questions.has_next %}
-                  <a href="?page={{ questions.next_page_number }}">next</a>
-                  <a href="?page={{ questions.paginator.num_pages }}">last &raquo;</a>
-              {% endif %}
-          </span>
-      </div> -->
-
-
       <nav aria-label="...">
         <ul class="pagination">
           {% if questions.has_previous %}
