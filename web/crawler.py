@@ -36,10 +36,8 @@ class LeetCodeCrawler(object):
         current_headers = self.headers.copy()
         login_url = 'https://leetcode.com/accounts/login/'
         login_info = {'csrfmiddlewaretoken':current_headers['x-csrftoken'],
-             'login':'lionpowder',
-              'password':'199488lkw@@',
-              # 'login':'xiyu@oregonstate.edu',
-              # 'password':'960615',
+             'login':'XX',
+              'password':'XX',
               'next':'/problems'
              }
         current_headers['referer'] = 'https://leetcode.com/accounts/login/'
