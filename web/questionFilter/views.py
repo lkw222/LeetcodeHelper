@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from questionFilter.models import *
 from questionFilter.forms import *
 from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 # Create your views here.
 def home(request):
     data = {}
@@ -16,7 +19,9 @@ def home(request):
     if len(company_selected) > 0:
         questions = Question.objects.filter(question_slug__in=CompanyTag.objects.filter(company_slug__in=company_selected.keys()).values_list('question_slug', flat=True))
     else:
-        questions = Question.objects.filter(frequency__gte=1).order_by('front_id')[:50]
+        questions = Question.objects.all()
+    if len(algorithm_selected) > 0:
+        questions = questions.filter(question_slug__in=AlgorithmTag.objects.filter(algorithm_slug__in=algorithm_selected.keys()).values_list('question_slug', flat=True))
     for question in questions:
         question.frequency /= 0.05
     limit = 20
@@ -24,7 +29,7 @@ def home(request):
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     data['questions'] = contacts
-
+    data['path'] = request.path
     return render(request, 'questionFilter/homepage.html', data)
 
 
@@ -40,7 +45,8 @@ def company_filter(request, company_slug):
     data = {'company_selected':company_selected}
     request.session['company_selected'] = company_selected
     # return render(request, 'questionFilter/homepage.html', data)
-    return home(request)
+    return HttpResponseRedirect("/")
+    # return home(request)
 
 def algorithm_filter(request, algorithm_slug):
     algorithm_selected = request.session.get('algorithm_selected', {})
@@ -52,7 +58,8 @@ def algorithm_filter(request, algorithm_slug):
     data = {'algorithm_selected':algorithm_selected}
     request.session['algorithm_selected'] = algorithm_selected
     # return render(request, 'questionFilter/homepage.html', data)
-    return home(request)
+    return HttpResponseRedirect("/")
+    # return home(request)
 
 
 def question_detail(request, question_slug):
