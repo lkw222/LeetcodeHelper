@@ -7,9 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/2e219fd9ac.js"></script>
   </head>
   <body>
-    <h1>Hi, 兔兔</h1>
+    <h1>Hi, Welcome to LeetcodeHelper</h1>
     <div class="container my-2">
       <button type="button" class="btn btn-success">Easy</button>
       <button type="button" class="btn btn-warning text-white">Medium</button>
@@ -78,6 +79,9 @@
             <th scope="row">{{question.front_id}}</th>
             <td>
               <a href="/question_detail/{{question.question_slug}}">{{question.name}}</a>
+              {% if question.paid_only %}
+              <i class="fa fa-unlock"></i>
+              {% endif %}
             </td>
             <td>
               {% if question.difficulty == 'Easy' %}

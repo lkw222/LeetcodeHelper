@@ -39,7 +39,7 @@ def home(request):
 
     for question in questions:
         question.frequency /= 0.05
-    limit = 20
+    limit = 50
     paginator = Paginator(questions, limit)
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
