@@ -11,6 +11,7 @@
   </head>
   <body>
     <h1>Hi, Welcome to LeetcodeHelper</h1>
+    <h1>{{post}}</h1>
     <div class="container my-2">
       <button type="button" class="btn btn-success">Easy</button>
       <button type="button" class="btn btn-warning text-white">Medium</button>
@@ -56,6 +57,23 @@
           {% endfor %}
         </div>
       </div>
+    </div>
+
+
+
+    <!-- Searching -->
+    <div class="container">
+      <form  action="/" method="post">
+
+        <div class="form-group">
+          <label for="searchContent">Search</label>
+          <div class="col-md-6">
+            <input type="text" class="form-control" name="search_content" placeholder="ID or Name">
+            {% csrf_token %}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
     </div>
 
 

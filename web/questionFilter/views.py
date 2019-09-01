@@ -4,6 +4,7 @@ from questionFilter.forms import *
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
@@ -15,16 +16,34 @@ def home(request):
     algorithm_selected = request.session.get('algorithm_selected', {})
     data['algorithm_selected'] = algorithm_selected
 
-    # questions = Question.objects.filter(frequency__gte=1)[:50]
+    # Company
     if len(company_selected) > 0:
         questions = Question.objects.filter(question_slug__in=CompanyTag.objects.filter(company_slug__in=company_selected.keys()).values_list('question_slug', flat=True))
     else:
         questions = Question.objects.all()
+    # Tag
     if len(algorithm_selected) > 0:
         questions = questions.filter(question_slug__in=AlgorithmTag.objects.filter(algorithm_slug__in=algorithm_selected.keys()).values_list('question_slug', flat=True))
-
-
-
+    # Search
+    if request.method == 'POST':
+        content = request.POST['search_content']
+        ids = []
+        names = []
+        for cur in content.split():
+            try:
+                ids.append(int(cur))
+            except:
+                names.append(cur)
+        data['post'] = (ids,names)
+        if names != [] and ids != []:
+            questions =  questions.filter(Q(name__icontains=' '.join(names)) & Q(front_id__in=ids))
+        elif ids != []:
+            questions =  questions.filter(Q(front_id__in=ids))
+        elif names != []:
+            questions =  questions.filter(Q(name__icontains=' '.join(names)))
+        else:
+            pass
+    # Sort
     sort_type = request.session.get('sort_type', 'id')
     if sort_type == 'id':
         questions = questions.order_by('front_id')
@@ -36,7 +55,6 @@ def home(request):
         questions = questions.order_by('question_slug')
     data['type'] = sort_type
 
-
     for question in questions:
         question.frequency /= 0.05
     limit = 50
@@ -47,8 +65,6 @@ def home(request):
     return render(request, 'questionFilter/homepage.html', data)
 
 
-# def sorted_by_frequency(request):
-
 def company_filter(request, company_slug):
     company_selected = request.session.get('company_selected', {})
     if company_slug in company_selected:
@@ -58,9 +74,8 @@ def company_filter(request, company_slug):
 
     data = {'company_selected':company_selected}
     request.session['company_selected'] = company_selected
-    # return render(request, 'questionFilter/homepage.html', data)
     return HttpResponseRedirect("/")
-    # return home(request)
+
 
 def algorithm_filter(request, algorithm_slug):
     algorithm_selected = request.session.get('algorithm_selected', {})
@@ -71,13 +86,14 @@ def algorithm_filter(request, algorithm_slug):
 
     data = {'algorithm_selected':algorithm_selected}
     request.session['algorithm_selected'] = algorithm_selected
-    # return render(request, 'questionFilter/homepage.html', data)
     return HttpResponseRedirect("/")
-    # return home(request)
+
 
 def question_sort(request, sort_type):
     request.session['sort_type'] = sort_type
     return HttpResponseRedirect("/")
+
+
 
 def question_detail(request, question_slug):
     detail = Question.objects.get(question_slug=question_slug)
