@@ -12,9 +12,23 @@
   <body>
     <h1>Hi, Welcome to LeetcodeHelper</h1>
     <div class="container my-2">
-      <button type="button" class="btn btn-success">Easy</button>
-      <button type="button" class="btn btn-warning text-white">Medium</button>
-      <button type="button" class="btn btn-danger">Hard</button>
+      <a href="/difficulty_filter/Easy" class="btn btn-outline-success
+        {% if 'Easy' in difficulty_selected %}
+          active
+        {% endif %}
+        " role="button" aria-pressed="true">Easy</a>
+      <a href="/difficulty_filter/Medium" class="btn btn-outline-warning
+        {% if 'Medium' in difficulty_selected %}
+          text-white active
+        {%else%}
+          text-orginges
+        {% endif %}
+      " role="button" aria-pressed="true">Medium</a>
+      <a href="/difficulty_filter/Hard" class="btn btn-outline-danger
+        {% if 'Hard' in difficulty_selected %}
+          active
+        {% endif %}
+      " role="button" aria-pressed="true">Hard</a>
     </div>
 
     <!-- Company select -->

@@ -15,6 +15,8 @@ def home(request):
     data['company_selected'] = company_selected
     algorithm_selected = request.session.get('algorithm_selected', {})
     data['algorithm_selected'] = algorithm_selected
+    difficulty_selected = request.session.get('difficulty_selected', {})
+    data['difficulty_selected'] = difficulty_selected
 
     # Company
     if len(company_selected) > 0:
@@ -24,6 +26,10 @@ def home(request):
     # Tag
     if len(algorithm_selected) > 0:
         questions = questions.filter(question_slug__in=AlgorithmTag.objects.filter(algorithm_slug__in=algorithm_selected.keys()).values_list('question_slug', flat=True))
+    # Difficulty
+    if 0 < len(difficulty_selected) < 3:
+        questions = questions.filter(difficulty__in=difficulty_selected)
+
     # Search
     if request.method == 'POST':
         content = request.POST['search_content']
@@ -34,7 +40,6 @@ def home(request):
                 ids.append(int(cur))
             except:
                 names.append(cur)
-        data['post'] = (ids,names)
         if names != [] and ids != []:
             questions =  questions.filter(Q(name__icontains=' '.join(names)) & Q(front_id__in=ids))
         elif ids != []:
@@ -88,6 +93,17 @@ def algorithm_filter(request, algorithm_slug):
     request.session['algorithm_selected'] = algorithm_selected
     return HttpResponseRedirect("/")
 
+
+def difficulty_filter(request, difficulty):
+    difficulty_selected = request.session.get('difficulty_selected', {})
+    if difficulty in difficulty_selected:
+        del difficulty_selected[difficulty]
+    else:
+        difficulty_selected[difficulty] = None
+
+    data = {'difficulty_selected':difficulty_selected}
+    request.session['difficulty_selected'] = difficulty_selected
+    return HttpResponseRedirect("/")
 
 def question_sort(request, sort_type):
     request.session['sort_type'] = sort_type
