@@ -17,15 +17,18 @@ def home(request):
     data['algorithm_selected'] = algorithm_selected
     difficulty_selected = request.session.get('difficulty_selected', {})
     data['difficulty_selected'] = difficulty_selected
+    questions = Question.objects.all()
 
     # Company
     if len(company_selected) > 0:
-        questions = Question.objects.filter(question_slug__in=CompanyTag.objects.filter(company_slug__in=company_selected.keys()).values_list('question_slug', flat=True))
-    else:
-        questions = Question.objects.all()
+        # questions = Question.objects.filter(question_slug__in=CompanyTag.objects.filter(company_slug__in=company_selected.keys()).values_list('question_slug', flat=True))
+        for cur_company in company_selected:
+            questions = questions.filter(companytag__company_slug__company_slug__exact=cur_company)
     # Tag
     if len(algorithm_selected) > 0:
-        questions = questions.filter(question_slug__in=AlgorithmTag.objects.filter(algorithm_slug__in=algorithm_selected.keys()).values_list('question_slug', flat=True))
+        # questions = questions.filter(question_slug__in=AlgorithmTag.objects.filter(algorithm_slug__in=algorithm_selected.keys()).values_list('question_slug', flat=True))
+        for cur_algorithm in algorithm_selected:
+            questions = questions.filter(algorithmtag__algorithm_slug__algorithm_slug__exact=cur_algorithm)
     # Difficulty
     if 0 < len(difficulty_selected) < 3:
         questions = questions.filter(difficulty__in=difficulty_selected)
