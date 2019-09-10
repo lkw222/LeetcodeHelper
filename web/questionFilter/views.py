@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Q
 
+
 # Create your views here.
 def home(request):
     data = {}
@@ -65,11 +66,16 @@ def home(request):
 
     for question in questions:
         question.frequency /= 0.05
+
+    #Pagination
     limit = 50
     paginator = Paginator(questions, limit)
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
+    page_range = get_pane_range(paginator, 5)
+
     data['questions'] = contacts
+    data['page_range'] = page_range
     return render(request, 'questionFilter/homepage.html', data)
 
 
@@ -112,6 +118,14 @@ def question_sort(request, sort_type):
     request.session['sort_type'] = sort_type
     return HttpResponseRedirect("/")
 
+def get_pane_range(paginator, display_num):
+    max_page = paginator.num_pages
+    page_range = {}
+    page_range[1] = range(1, min(max_page, display_num)+1)
+    page_range[2] = range(1, min(max_page, display_num)+1)
+    page_range[max_page-1] = range(max(1, max_page+1-display_num), max_page)
+    page_range[max_page] = range(max(1, max_page+1-display_num), max_page)
+    return page_range
 
 
 def question_detail(request, question_slug):
