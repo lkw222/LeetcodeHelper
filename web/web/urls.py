@@ -25,5 +25,6 @@ urlpatterns = [
     re_path(r'algorithm_filter/(.+)/$', views.algorithm_filter),
     re_path(r'difficulty_filter/(.+)/$', views.difficulty_filter),
     re_path(r'question_sort/(.+)/$', views.question_sort),
+    re_path(r'like_filter/(.+)/$', views.like_filter)
 
 ]

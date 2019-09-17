@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Q
+from django.db.models import F
 
 
 # Create your views here.
@@ -18,21 +19,38 @@ def home(request):
     data['algorithm_selected'] = algorithm_selected
     difficulty_selected = request.session.get('difficulty_selected', {})
     data['difficulty_selected'] = difficulty_selected
+    like_ratio = request.session.get('like_ratio', 'all')
+    data['like_ratio'] = like_ratio
     questions = Question.objects.all()
 
     # Company
     if len(company_selected) > 0:
-        # questions = Question.objects.filter(question_slug__in=CompanyTag.objects.filter(company_slug__in=company_selected.keys()).values_list('question_slug', flat=True))
         for cur_company in company_selected:
             questions = questions.filter(companytag__company_slug__company_slug__exact=cur_company)
+
     # Tag
     if len(algorithm_selected) > 0:
-        # questions = questions.filter(question_slug__in=AlgorithmTag.objects.filter(algorithm_slug__in=algorithm_selected.keys()).values_list('question_slug', flat=True))
         for cur_algorithm in algorithm_selected:
             questions = questions.filter(algorithmtag__algorithm_slug__algorithm_slug__exact=cur_algorithm)
+
     # Difficulty
     if 0 < len(difficulty_selected) < 3:
         questions = questions.filter(difficulty__in=difficulty_selected)
+
+    # Like Ratio
+    if like_ratio == "Best":
+        questions = questions.filter(like__gte=F('dislike')*10)
+    elif like_ratio == "Excellent":
+        questions = questions.filter(Q(like__lt=F('dislike')*10) & Q(like__gte=F('dislike')*1))
+    elif like_ratio == "Normal":
+        questions = questions.filter(Q(like__lt=F('dislike')*1) & Q(like__gte=F('dislike')*0.5))
+    elif like_ratio == "CRAZE":
+        questions = questions.filter(Q(like__lt=F('dislike')*0.5) & Q(like__gte=F('dislike')*0.1))
+    elif like_ratio == "SHIT":
+        questions = questions.filter(like__lte=F('dislike')*0.1)
+    else:
+        pass
+
 
     # Search
     if request.method == 'POST':
@@ -126,6 +144,11 @@ def get_pane_range(paginator, display_num):
     page_range[max_page-1] = range(max(1, max_page+1-display_num), max_page)
     page_range[max_page] = range(max(1, max_page+1-display_num), max_page)
     return page_range
+
+
+def like_filter(request, like_ratio):
+    request.session['like_ratio'] = like_ratio
+    return HttpResponseRedirect("/")
 
 
 def question_detail(request, question_slug):

@@ -21,7 +21,7 @@
       </div>
     </div>
 
-
+    <!-- Difficulty -->
     <div class="container my-2">
       <a href="/difficulty_filter/Easy" class="btn btn-outline-success
         {% if 'Easy' in difficulty_selected %}
@@ -84,13 +84,30 @@
     </div>
 
 
+    <!-- Like and Dislike -->
+    <div class="container">
+      <div class="dropdown my-2">
+        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Likes&Dislikes (Ratio)
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+          <a class="dropdown-item {% if like_ratio == 'all' %} active {% endif %}" href="/like_filter/all"> <b>All Questions</b> </a>
+          <a class="dropdown-item {% if like_ratio == 'Best' %} active {% endif %}" href="/like_filter/Best"> <b>Best/Classic (>10)</b> </a>
+          <a class="dropdown-item {% if like_ratio == 'Excellent' %} active {% endif %}" href="/like_filter/Excellent"> <b>Excellent (10~1)</b> </a>
+          <a class="dropdown-item {% if like_ratio == 'Normal' %} active {% endif %}" href="/like_filter/Normal"> <b>Normal(1~0.5)</b> </a>
+          <a class="dropdown-item {% if like_ratio == 'CRAZE' %} active {% endif %}" href="/like_filter/CRAZE"> <b>JUST CRAZE ME! (0.5~0.1)</b> </a>
+          <a class="dropdown-item {% if like_ratio == 'SHIT' %} active {% endif %}" href="/like_filter/SHIT"> <b>SHIT!(<0.1)</b> </a>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Searching -->
     <div class="container">
       <form  action="/" method="post">
 
         <div class="form-group">
-          <label for="searchContent">Search</label>
+          <label for="searchContent"> <b>Search</b> </label>
           <div class="col-md-6">
             <input type="text" class="form-control" name="search_content" placeholder="ID or Name">
             {% csrf_token %}
@@ -105,7 +122,7 @@
 
     <!-- Question detail -->
     <div class="container">
-      <table class="table table-hover table-striped">
+      <table class="table table-hover table-striped my-2">
         <thead>
           <tr>
             <th scope="col"> <a href="/question_sort/id">#</a> </th>
